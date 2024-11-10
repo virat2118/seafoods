@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fresh Seafood Delivery</title>
+    <link rel="stylesheet" href="styles.css"> <!-- Link to the CSS file -->
+</head>
+<body>
+
+    <!-- Header Section -->
+    <header>
+        <div class="header-container">
+            <h1>Fresh Seafood Delivered</h1>
+            <nav>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#categories">Categories</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <form class="search-form" onsubmit="searchSeafood(event)">
+                <input type="text" id="searchQuery" placeholder="Search for seafood..." aria-label="Search" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <h2>Fresh, Sustainably Sourced Seafood Delivered to Your Doorstep</h2>
+        <p>Enjoy high-quality seafood delivered fresh to your home. Order today!</p>
+        <a href="#products" class="cta-button">Shop Now</a>
+    </section>
+
+    <!-- Products Section -->
+    <section id="products" class="products-section">
+        <h2>Our Fresh Selections</h2>
+        <div class="product-list" id="productList">
+            <!-- Product cards will be populated here -->
+        </div>
+    </section>
+
+    <!-- Detail Section -->
+    <section id="productDetail" class="product-detail" style="display: none;">
+        <h2 id="detailTitle"></h2>
+        <p id="detailDescription"></p>
+        <p id="detailPrice"></p>
+        <p id="detailTypes"></p> <!-- New paragraph for crab types -->
+        <button onclick="closeDetail()">Close</button>
+    </section>
+
+    <!-- Categories Section -->
+    <section id="categories" class="categories-section">
+        <h2>Seafood Categories</h2>
+        <div class="category-list">
+            <div class="category-card">Fish</div>
+            <div class="category-card">Shellfish</div>
+            <div class="category-card">Prawns</div>
+            <div class="category-card">Crabs</div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact-section">
+        <h2>Contact Us</h2>
+        <p>Questions? Reach out to us for more information about our products and delivery options.</p>
+        <form>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>© 2024 Fresh Seafood Delivery. All rights reserved.</p>
+        <p>Contact us at: support@freshseafood.com</p>
+    </footer>
+
+    <script>
+        const products = [
+            {"id": 1, "name": "Salmon", "price": 500, "description": "Fresh salmon fillet"},
+            {"id": 2, "name": "Shrimp", "price": 230, "description": "Juicy shrimp"},
+            {"id": 3, "name": "Crabs", "price": 200, "description": "Live crabs", "types": ["Manda Peethalu", "Pasi Peethalu", "Savala Peethalu"]},
+            {"id": 4, "name": "Lobster", "price": 1200, "description": "Fresh lobster"},
+        ];
+
+        function searchSeafood(event) {
+            event.preventDefault(); // Prevent form submission
+            const query = document.getElementById('searchQuery').value.toLowerCase();
+
+            const results = products.filter(product => product.name.toLowerCase().includes(query));
+            displayProducts(results);
+        }
+
+        function displayProducts(productsToDisplay) {
+            const productList = document.getElementById('productList');
+            productList.innerHTML = ''; // Clear previous results
+
+            if (productsToDisplay.length === 0) {
+                productList.innerHTML = '<p>No products found.</p>';
+            } else {
+                productsToDisplay.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.className = 'product-card';
+                    productCard.innerHTML = `
+                        <img src="${product.name.toLowerCase()}.jpg" alt="${product.name}">
+                        <h3>${product.name}</h3>
+                        <p>$${product.price} per kg</p>
+                        <button onclick="showDetail(${product.id})">View Details</button>
+                    `;
+                    productList.appendChild(productCard);
+                });
+            }
+        }
+
+        function showDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                document.getElementById('detailTitle').textContent = product.name;
+                document.getElementById('detailDescription').textContent = product.description;
+                document.getElementById('detailPrice').textContent = `$${product.price} per kg`;
+
+                // Display crab types if the product is crabs
+                if (product.types) {
+                    document.getElementById('detailTypes').innerHTML = `<strong>Types:</strong> ${product.types.join(', ')}`;
+                } else {
+                    document.getElementById('detailTypes').innerHTML = '';
+                }
+
+                document.getElementById('productDetail').style.display = 'block';
+            }
+        }
+
+        function closeDetail() {
+            document.getElementById('productDetail').style.display = 'none';
+        }
+
+    </script>
+
+</body>
+</html>
+
+
